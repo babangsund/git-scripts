@@ -1,0 +1,31 @@
+#!/bin/bash
+set -e
+
+merge_commit=$1
+
+if [[ ! $merge_commit ]]; then
+  echo "No merge commit was provided."
+  exit 1
+fi
+
+function cherry_pick_branch() {
+  git cherry-pick $(git rev-list \
+    --reverse                    \
+    --no-merges                  \
+    --abbrev-commit              \
+    $1^..$1)
+}
+
+read -p "Do you want to create a branch? [y/n]$n" -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+  branch="cherry-pick/$merge_commit"
+  git checkout -b $branch
+
+  cherry_pick_branch $merge_commit
+
+  git checkout -
+  git merge --no-ff $branch
+  git branch -d $branch
+else
+  cherry_pick_branch $merge_commit
+fi
