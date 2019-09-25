@@ -1,0 +1,22 @@
+#!/bin/bash
+set -e
+
+since=${since:-"6am"}
+branch=${branch:-"master"}
+author=${author:-$(git config user.email)}
+
+while [ $# -gt 0 ]; do
+   if [[ $1 == *"--"* ]]; then
+        param="${1/--/}"
+        declare $param="$2"
+   fi
+  shift
+done
+
+git cherry-pick $(git rev-list \
+  --reverse                    \
+  --no-merges                  \
+  --since=$since               \
+  --abbrev-commit              \
+  --author=$author             \
+  $branch)
