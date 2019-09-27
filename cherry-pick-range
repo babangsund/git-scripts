@@ -1,0 +1,30 @@
+#!/bin/bash
+set -e
+
+if [[ ! $2 ]]; then
+  echo "Please enter two valid commits."
+  exit 1
+fi
+
+n=$'\n'
+cherry_pick_range() {
+  git cherry-pick $(git rev-list \
+    --reverse                    \
+    --no-merges                  \
+    --abbrev-commit              \
+    $2 --not $1^1)
+}
+
+read -p "Do you want to create a branch? [y/n]$n" -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+  branch="cherry-pick/$1-$2"
+  git checkout -b $branch
+
+  cherry_pick_range $1 $2
+
+  git checkout -
+  git merge --no-ff $branch
+  git branch -d $branch
+else
+  cherry_pick_range $1 $2
+fi
