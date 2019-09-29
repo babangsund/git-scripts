@@ -7,7 +7,10 @@
 - `cherry-pick-branch` Given a merge commit, cherry-picks all associated commits.
     1. Merge commit.
 
-- `cherry-pick-author`
+- `cherry-pick-author` Cherry-picks all commits for an author within a set of parameters.
     - `--since="10am"`, defaults to `6am`.
     - `--branch="dc1f230"`, defaults to `master`.
     - `--author=colleague`, defaults to `user.email`.
+
+- `merge-branch` Rebase, merge and push a branch to origin/master.
+    1. Branch to merge
