@@ -14,3 +14,5 @@
 
 - `merge-branch` Rebase, merge and push a branch to origin/master.
     1. Branch to merge
+
+- `delete-stale-branches` Delete all branches on origin, older than a month. Excludes HEAD and release/ branches.
