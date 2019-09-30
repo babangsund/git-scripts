@@ -1,0 +1,18 @@
+#!/bin/bash
+set -e
+
+git remote prune origin
+
+for branch in `git branch -r | grep -v 'HEAD\|release'`; do
+  date=$(echo -e `git log --format="%cr" $branch | head -n 1 | grep 'month\|year'`)
+  if [[ $date ]]; then
+    branch_no_origin=$(echo $branch | sed -e 's/.*origin\///g')
+    echo $date
+    echo $branch_no_origin
+    git push origin --delete $branch_no_origin &>/dev/null
+  fi
+done
+
+
+# Copy paste into terminal for a sorted list
+# for branch in `git branch -r | grep -v "HEAD\|release"`; do echo -e `git log --format="%cr" $branch | head -n 1` \\t$branch; done | sort -r
